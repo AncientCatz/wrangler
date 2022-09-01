@@ -33,13 +33,13 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-          target: armv7-unknown-linux-gnueabihf
+          target: ${{ env.LINUX_TARGET }}
           override: true
       - uses: actions-rs/cargo@v1
         with:
           use-cross: true
           command: build
-          args: --target ${{ env.LINUX_TARGET }}
+          args: --release --target ${{ env.LINUX_TARGET }}
 
       - name: Query version number
         id: get_version
