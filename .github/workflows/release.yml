@@ -30,6 +30,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: armv7-unknown-linux-gnueabihf
+          override: true
+      - uses: actions-rs/cargo@v1
+        with:
+          use-cross: true
+          command: build
+          args: --target ${{ env.LINUX_TARGET }}
 
       - name: Query version number
         id: get_version
@@ -50,15 +60,15 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install musl-tools -y
 
-      - name: Install cross (Linux)
-        if: matrix.build == 'linux'
-        run: cargo install cross --git https://github.com/cross-rs/cross
+#      - name: Install cross (Linux)
+#        if: matrix.build == 'linux'
+#        run: cargo install cross --git https://github.com/cross-rs/cross
 
-      - name: Build (Linux)
-        if: matrix.build == 'linux'
-        run: |
-          rustup target add ${{ env.LINUX_TARGET }}
-          cross build --release --target ${{ env.LINUX_TARGET }}
+#      - name: Build (Linux)
+#        if: matrix.build == 'linux'
+#        run: |
+#          rustup target add ${{ env.LINUX_TARGET }}
+#          cross build --release --target ${{ env.LINUX_TARGET }}
 
       - name: Create artifact directory
         run: |
